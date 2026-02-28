@@ -50,31 +50,32 @@ export class ListSuggestionComponent {
     },
   ];
 
-  searchText: string = '';
-  selectedCategory: string = '';
+  // For filtering
+  searchTerm: string = '';
 
-  get categories(): string[] {
-    return [...new Set(this.suggestions.map((s) => s.category))];
+  // For favorites
+  favorites: Suggestion[] = [];
+
+  // Filtered suggestions based on search term
+  get filteredSuggestions(): Suggestion[] {
+    return this.suggestions.filter(
+      (s) =>
+        s.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        s.category.toLowerCase().includes(this.searchTerm.toLowerCase()),
+    );
   }
 
-  likeSuggestion(suggestion: Suggestion): void {
+  like(suggestion: Suggestion): void {
     suggestion.nbLikes++;
   }
 
   addToFavorites(suggestion: Suggestion): void {
-    // Logique d'ajout aux favoris (à implémenter)
-    console.log('Ajouté aux favoris:', suggestion);
+    if (!this.favorites.includes(suggestion)) {
+      this.favorites.push(suggestion);
+    }
   }
 
-  get filteredSuggestions(): Suggestion[] {
-    return this.suggestions.filter((s) => {
-      const matchesTitle = s.title
-        .toLowerCase()
-        .includes(this.searchText.toLowerCase());
-      const matchesCategory = this.selectedCategory
-        ? s.category === this.selectedCategory
-        : true;
-      return matchesTitle && matchesCategory;
-    });
+  isRefused(status: string): boolean {
+    return status === 'refusee';
   }
 }

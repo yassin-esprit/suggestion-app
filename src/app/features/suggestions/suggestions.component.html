@@ -1,1 +1,60 @@
-<p>suggestions works!</p>
+<div class="container mt-4">
+  <h2>Liste des suggestions</h2>
+
+  <!-- Search bar -->
+  <div class="form-group">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Rechercher par titre ou catégorie"
+      [(ngModel)]="searchTerm"
+    />
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Description</th>
+        <th>Catégorie</th>
+        <th>Date</th>
+        <th>Statut</th>
+        <th>Likes</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let suggestion of filteredSuggestions">
+        <td>{{ suggestion.title }}</td>
+        <td>{{ suggestion.description }}</td>
+        <td>{{ suggestion.category }}</td>
+        <td>{{ suggestion.date | date: "dd/MM/yyyy" }}</td>
+        <td>{{ suggestion.status }}</td>
+        <td>{{ suggestion.nbLikes }}</td>
+        <td>
+          <button
+            *ngIf="!isRefused(suggestion.status)"
+            class="btn btn-sm btn-primary me-2"
+            (click)="like(suggestion)"
+          >
+            Like
+          </button>
+          <button
+            *ngIf="!isRefused(suggestion.status)"
+            class="btn btn-sm btn-success"
+            (click)="addToFavorites(suggestion)"
+          >
+            Ajouter aux favoris
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="favorites.length > 0" class="mt-4">
+    <h3>Favoris</h3>
+    <ul>
+      <li *ngFor="let fav of favorites">{{ fav.title }}</li>
+    </ul>
+  </div>
+</div>
